@@ -1,0 +1,32 @@
+name: Build & Push Image 
+
+on: 
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      -  name: checkout 
+         uses: actions/checkout
+
+      -  name: set up docker buildx
+         uses: docker/setup-buildx-action@v3
+
+      -  name: login to docker hub 
+         uses: docker/login-actions@v3
+         with:
+           username: ${{secrets.DOCKERHUB_USERNAME}}
+           password: ${{secrets.DOCKERHUB_PASSWORD}}
+
+      -  name: Build and push (tag: latest + sha)
+         uses: docker/build-push-actions@v3
+         with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/docker-demo-site:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/docker-demo-site:${{ github.sha }}
