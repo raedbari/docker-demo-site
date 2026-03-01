@@ -30,3 +30,4 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/docker-demo-site:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/docker-demo-site:${{ github.sha }}
+
